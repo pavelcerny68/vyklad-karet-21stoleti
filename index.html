@@ -1,0 +1,316 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Moderní Tarot Chaosu</title>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 800px;
+                margin: 20px auto;
+                padding: 20px;
+                background-color: #f0f0f0;
+            }
+            .container {
+                text-align: center;
+            }
+            .cards {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                margin: 30px 0;
+                flex-wrap: wrap;
+            }
+            .card {
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                width: 200px;
+                min-height: 250px;
+                cursor: pointer;
+                transition: transform 0.3s;
+            }
+            .card:hover {
+                transform: translateY(-5px);
+            }
+            button {
+                padding: 12px 25px;
+                background: #6c5ce7;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            button:hover {
+                background: #5b4bc4;
+            }
+            h1 {
+                color: #333;
+                margin-bottom: 30px;
+            }
+            h2 {
+                color: #2d3436;
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+            p {
+                color: #636e72;
+                font-size: 14px;
+                line-height: 1.5;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app" class="container">
+            <h1>Moderní Tarot Chaosu</h1>
+            <button @click="vykladatKarty">
+                {{ karty.length ? 'Nový výklad' : 'Začít výklad' }}
+            </button>
+
+            <div class="cards">
+                <div class="card" v-for="(karta, index) in karty" :key="index">
+                    <h2>{{ karta.jmeno }}</h2>
+                    <p>{{ karta.popis }}</p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const { createApp } = Vue;
+
+            const karetniBalicek = [
+                {
+                    jmeno: "Digitální Závislost",
+                    popis: "Ztráta kontaktu s realitou. Odlož obrazovky a hledej autentické spojení se světem."
+                },
+                {
+                    jmeno: "Klimatický Kolaps",
+                    popis: "Pocit bezmoci tváří v tvář změnám. Malé každodenní volby mají větší dopad než čekáš."
+                },
+                {
+                    jmeno: "Sociální Bublina",
+                    popis: "Uvězněn ve vlastních názorech. Poslouchej ty, s nimiž nesouhlasíš - růst čeká za hranicí komfortu."
+                },
+                {
+                    jmeno: "Práce Bez Smyslu",
+                    popis: "Vyhoření z prázdných úkolů. Hledej činnost, která naplňuje nejen peněženku, ale i duši."
+                },
+                {
+                    jmeno: "Dezinformační Mlha",
+                    popis: "Pravda se rozplývá v moři lží. Ověřuj zdroje, důvěřuj fakta, ne algoritmy."
+                },
+                {
+                    jmeno: "Městská Samota",
+                    popis: "Osamění v davu. Skutečné vztahy vyžadují křehkost - riskni opravdové spojení."
+                },
+                {
+                    jmeno: "Ekonomická Houpačka",
+                    popis: "Nejistá budoucnost. Buduj rezilienci, ne jen rezervy. Flexibilita je nové bohatství."
+                },
+                {
+                    jmeno: "Digitální Šmírák",
+                    popis: "Ztráta soukromí je daní za pohodlí. Rozvažuj, co skutečně chceš odhalit."
+                },
+                {
+                    jmeno: "Generační Propast",
+                    popis: "Nesrozumitelné světy pod jednou střechou. Hledej mosty místo zdí - v každé době je moudrost."
+                },
+                {
+                    jmeno: "Úzkost z Volby",
+                    popis: "Paralyzován možnostmi. Někdy stačí 'dost dobré'. Perfekcionismus je nepřítel postupu."
+                },
+                {
+                    jmeno: "Infodemická Lavina",
+                    popis: "Přetížen informacemi. Nauč se filtrovat podstatné. Ticho je nový luxus."
+                },
+                {
+                    jmeno: "Kancelářské Vězení",
+                    popis: "Uvězněn v open-space. Hledej rovnováhu mezi produktivitou a lidskostí."
+                },
+                {
+                    jmeno: "FOMO Syndrom",
+                    popis: "Strach, že něco zmeškáš. Život se děje tady a teď - ne na Instagramu."
+                },
+                {
+                    jmeno: "Prekarizovaná Existence",
+                    popis: "Nejisté základy. Buduj na tom, co nemůžeš ztratit - svých dovednostech a vztazích."
+                },
+                {
+                    jmeno: "Emoční Vyčerpání",
+                    popis: "Prázdná nádrž. Dovol si odpočinek bez výčitek. Není to lenost, ale nutnost."
+                },
+                {
+                    jmeno: "Algoritmická Past",
+                    popis: "Ovládán kódem. Vzpomeň si, že ty jsi programátor svého života - ne jeho uživatel."
+                },
+                {
+                    jmeno: "Klimatický Únik",
+                    popis: "Útěk před realitou. Transformuj úzkost v akci - i malé kroky mění trajektorii."
+                },
+                {
+                    jmeno: "Hyperkonzum",
+                    popis: "Nekonečná touha po více. Hledej dostatek v jednoduchosti. Skutečné bohatství je nehmotné."
+                },
+                {
+                    jmeno: "Digitální Amnézie",
+                    popis: "Zapomínání bez Google. Trénuj paměť - některé odpovědi jsou uvnitř, ne v cloudu."
+                },
+                {
+                    jmeno: "Společenské Zrcadlo",
+                    popis: "Ztráta autenticity. Odlož masky - svět potřebuje tvou nedokonalou pravdu."
+                },
+                {
+                    jmeno: "Práce na Žádanku",
+                    popis: "Nejisté živobytí. Rozvíjej kořeny do více půd. Nezávislost roste z rozmanitosti."
+                },
+                {
+                    jmeno: "Technologické Vzdání",
+                    popis: "Bezmoc vůči strojům. Pamatuj - AI slouží tobě, ne ty jí. Ovládej nástroje, nebuď ovládán."
+                },
+                {
+                    jmeno: "Ekokatastrofismus",
+                    popis: "Paralyzující vize konce. Zaměř se na to, co můžeš ovlivnit. Naděje je radikální čin."
+                },
+                {
+                    jmeno: "Kancelářský Zombie",
+                    popis: "Duše umírá v meetingech. Vsaď na smysluplnost. Peníze živí tělo, ale ne ducha."
+                },
+                {
+                    jmeno: "Sociální Mediokerita",
+                    popis: "Průměrnost jako norma. Odvaž se vyniknout. Originalita bolí, ale sterilita zabíjí."
+                },
+                {
+                    jmeno: "Digitální Nomádství",
+                    popis: "Svoboda bez kořenů. Pamatuj - i ptáci potřebují hnízdo. Buduj domov v sobě."
+                },
+                {
+                    jmeno: "Informační Obézita",
+                    popis: "Přejídání se obsahem. Naslouchej hladu duše. Kvalita nad kvantitu."
+                },
+                {
+                    jmeno: "Kognitivní Zkratka",
+                    popis: "Myšlení na autopilota. Probouzej vědomou pozornost. Rozhoduj se, ne reaguj."
+                },
+                {
+                    jmeno: "Emoční Analýza",
+                    popis: "Přemýšlení místo cítění. Někdy je třeba vypnout hlavu a zapnout srdce."
+                },
+                {
+                    jmeno: "Společenský Rozpad",
+                    popis: "Rozbitá společenství. Buď lepidlem ve svém okolí. Začni u jednoho mostu."
+                },
+                {
+                    jmeno: "Virtuální Identita",
+                    popis: "Ztráta sebe v online světě. Najdi své skutečné já mimo profily a avatary."
+                },
+                {
+                    jmeno: "Biohacking Únik",
+                    popis: "Honba za dokonalostí. Přijmi své lidství. Nedokonalost je tvůj superpower."
+                },
+                {
+                    jmeno: "Kolektivní Burnout",
+                    popis: "Společenské vyhoření. Odpočinek je revoluce. Produktivita není ctnost."
+                },
+                {
+                    jmeno: "Deepfake Realita",
+                    popis: "Neschopnost rozlišit pravdu. Důvěřuj svému vnitřnímu kompasu více než obrazovkám."
+                },
+                {
+                    jmeno: "Klimatický Exodus",
+                    popis: "Migrace za lepším životem. Buď mostem, ne zdí. Solidarita je nové přežití."
+                },
+                {
+                    jmeno: "Algoritmická Deprese",
+                    popis: "Smutek ze srovnávání. Pamatuj - každý profil je editovaná verze reality."
+                },
+                {
+                    jmeno: "Práce z Krachu",
+                    popis: "Nejistota zaměstnání. Rozvíjej odolnost. Schopnost přizpůsobit se je nová jistota."
+                },
+                {
+                    jmeno: "Digitální Detoxikace",
+                    popis: "Očista od technologií. Vytvoř si offline rituály. Ticho léčí."
+                },
+                {
+                    jmeno: "Politický Rozkol",
+                    popis: "Společnost v rozkladu. Hledej společné hodnoty. Dialog začíná nasloucháním."
+                },
+                {
+                    jmeno: "Ekonomická Turbulence",
+                    popis: "Nejisté finanční vody. Investuj do zkušeností, ne věcí. Skutečné bohatství je uvnitř."
+                },
+                {
+                    jmeno: "Kulturní Apatie",
+                    popis: "Lhostejnost k umění. Hledej krásu v každodennosti. Kreativita je vzpourou."
+                },
+                {
+                    jmeno: "Vědecký Skepticismus",
+                    popis: "Nedůvěra v poznání. Vzdělávej se kriticky. Fakta nejsou názor."
+                },
+                {
+                    jmeno: "Sociální Izolace",
+                    popis: "Svět za obrazovkami. Iniciuj skutečná setkání. Dotek léčí."
+                },
+                {
+                    jmeno: "Konspirační Myšlení",
+                    popis: "Hledání skrytých pravd. Někdy je jednoduché vysvětlení to pravé. Komplexnost není spiknutí."
+                },
+                {
+                    jmeno: "Emoční Analýza",
+                    popis: "Přemýšlení místo cítění. Někdy je třeba vypnout hlavu a zapnout srdce."
+                },
+                {
+                    jmeno: "Biofilní Hlad",
+                    popis: "Touha po přírodě. Propoj se se zemí. Stromy jsou nejstarší učitelé."
+                },
+                {
+                    jmeno: "Mentální Přetížení",
+                    popis: "Mozek v přetlaku. Zařaď digitální půsty. Prázdnota je prostor pro nové."
+                },
+                {
+                    jmeno: "Kreativní Blokáda",
+                    popis: "Vyprahlost inspirace. Pusť se do práce bez očekávání. Proces je cíl."
+                },
+                {
+                    jmeno: "Společenská Dysfunkce",
+                    popis: "Nejistota ve vztazích. Buduj důvěru malými činy. Autenticita přitahuje."
+                },
+                {
+                    jmeno: "Ekologická Beznaděj",
+                    popis: "Pocit marnosti. Zaměř se na lokální změny. Oceány začínají kapkami."
+                },
+                {
+                    jmeno: "Feminismus Křižovatky",
+                    popis: "Boj o rovnost v nové éře. Naslouchej různým perspektivám. Společenství je síla."
+                },
+                {
+                    jmeno: "Digitalizovaná Láska",
+                    popis: "Vztahy přes aplikace. Riskni zranitelnost. Skutečné spojení vyžaduje přítomnost."
+                },
+                {
+                    jmeno: "Krize Důvěry",
+                    popis: "Svět bez jistot. Začni důvěřovat sám sobě. Vnitřní kompas nikdy nelže."
+                }
+            ];
+
+            createApp({
+                data() {
+                    return {
+                        karty: []
+                    };
+                },
+                methods: {
+                    vykladatKarty() {
+                        // Zamíchat karty a vybrat 3 unikátní
+                        const zamichane = [...karetniBalicek].sort(
+                            () => 0.5 - Math.random()
+                        );
+                        this.karty = zamichane.slice(0, 3);
+                    }
+                }
+            }).mount("#app");
+        </script>
+    </body>
+</html>
